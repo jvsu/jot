@@ -1,0 +1,83 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.notes{
+			overflow-x: scroll;
+    		overflow-y: hidden;
+   		 	white-space: nowrap;
+		}
+
+		.jot{
+			height:300px;
+			width:300px;
+			border:1px solid black;
+			display:inline-block;
+			vertical-align: top;
+			margin:5px;
+		}
+		.note_content{
+			display:block;
+			white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+			white-space: pre-wrap;
+			word-break: break-all;
+			width:280px;
+		}
+		.collection_vid{
+			display: block;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		.title{
+			display:inline-block;
+			width:500px;
+	
+		}
+		.upper_options h4{
+			display:inline-block;
+		}
+		.delete{
+			width:100px;
+			display:inline-block;
+			vertical-align: top;
+		}
+		h1{
+			margin-bottom:30px;
+		}
+
+
+	</style>
+</head>
+<body>
+	<h1>All Collections</h1>
+	<a href="/homes/index" id='back'>Back</a>
+	<div id='all_collections'>
+		<%@collections.each do |collection| %>
+			<div class='collection'>
+				<div class='upper_options'>
+					<h4><a href="/notes/new/<%=collection.id %>" class='title'><%= collection.name%></a></h4>
+					<a href="/collections/destroy/<%=collection.id %>" class='delete'>Delete</a>
+				</div>
+				
+				<div class='notes'>
+					<% @notes.each do |note|%>
+						<%if note.collection_id == collection.id %>
+							<div class='jot'>
+								<p><%=note.time_stamp_h%>H <%=note.time_stamp_m%> M <%= note.time_stamp_s%> S</p>
+								<p class='note_content'><a href="/notes/retrieve/<%=note.id %>"><%=note.notes %></a></p>
+							</div>	
+
+						<% end%>
+					<%end %>
+				</div>
+			</div>
+
+		<%end %>
+
+	</div>
+</body>
+</html>
