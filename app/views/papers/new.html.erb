@@ -1,0 +1,262 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		#edit_thesis input{
+			display:block;
+		}
+		#new_point input{
+			display:block;
+		}
+		#left_section{
+			display:inline-block;
+			margin-left:250px;
+		}
+		#points{
+			display:inline-block;
+			vertical-align: top;
+			margin-left:200px;
+		}
+		#video{
+			width:640px;
+			height:390px;
+			border:1px solid black;
+		}
+		.paper_point{
+			border:1px solid black;
+		}
+		.paper_point_upper a {
+			display:inline-block;
+			width:200px;
+		}
+		.paper_point_upper h3{
+			display:inline-block;
+			width:250px;
+		}
+		.add_note{
+			display:block;
+		}
+		.support{
+			border:1px solid black;
+			width:250px;
+			height:250px;
+			margin:8px;
+		}
+		#video_player{
+			display:inline-block;
+			vertical-align: top;
+			margin-left:150px;
+
+		}
+		.paper_point{
+			display:block;
+		}
+		.support_notes{
+			 overflow-x: scroll;
+   			 overflow-y: hidden;
+   			 white-space: nowrap;
+   			 height:350px;
+		}
+		.support{
+			display:inline-block;
+			white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+			white-space: pre-wrap;
+			word-break: break-all;
+			width:360px;
+			vertical-align: top;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			//hide edit
+			$("#edit_thesis").hide();
+			$(".edit").hide();
+
+			//ajax submit
+			$("#edit_paper").submit(function(){
+				$.post($(this).attr('action'),$(this).serialize(),function(data){
+					$("#paper_name").html("<h2 id='paper_name'>"+data.name+"</h2>");
+					$("#paper_thesis").html("<p id='paper_thesis'>"+data.thesis+"</p>");
+				},"json");
+				return false; 
+			})
+
+			$(document).on("click","#edit",function(){
+				$("#edit_thesis").toggle();
+				return false;
+			})
+			//ajax submit new point
+			// $("#point_form").submit(function(){
+			// 	$.post($(this).attr('action'),$(this).serialize(),function(data){
+			// 		$("#stream").prepend("<div class='paper_point'><div class='paper_point_upper'><h3>Description</h3><a href=''>Delete</a></div><p id='description"+data.point_id+"'>"+data.description+"</p><button id='d_"+data.point_id+"'>Edit</button><div id='edit_d_"+data.point_id+"' class='edit'><form action='/points/edit' method='post' id='edit_f_d"+data.point_id+"'><input type='text' name='point[description]' placeholder="+data.description+"><input type='hidden' name='point[user_id]' value="+data.user_id+"><input type='hidden' name='point[paper_id]' value="+data.paper_id+"><input type='hidden' name='point[point_id]' value="+data.point_id+"><input type='hidden' name='point[type]' value='description'><button id='f_d"+data.point_id+"'>Submit</button></form></div><h4>Explanation</h4><p id='explanation"+data.point_id+"'>"+data.explanation+"</p><button id='e_"+data.point_id+"'>Edit</button><div id='edit_e_"+data.point_id+"' class='edit' ><form action='/points/edit' method='post' id='edit_f_e"+data.point_id+"'><textarea name='point[explanation]' placeholder='Enter Explanation'>"+data.explanation+"</textarea><input type='hidden' name='point[user_id]' value="+data.user_id+"><input type='hidden' name='point[paper_id]' value="+data.paper_id+"><input type='hidden' name='point[point_id]' value="+data.point_id+"><input type='hidden' name='point[type]' value='explanation'><button id='f_e"+data.point_id+"'>Submit</button></form></div><a href='' class='add_note'>Add Note</a><div class='current_notes'></div></div>");// end here
+			// 		// alert(data.success);
+			// 	}, "json");
+			// 	return false;
+			// })
+
+			$("button").click(function(event){
+				id_name = $(this).attr("id");
+				toggle_name = "#"+"edit_"+id_name;
+				// alert(toggle_name);
+				$(toggle_name).toggle();
+
+				//toggle for editing description and explanation
+				if (id_name[0]=='f' )
+				{
+					form_id = "#"+"edit_"+id_name;
+					$(form_id).submit(function()
+					{
+						$.post($(this).attr('action'),$(this).serialize(),function(data)
+						{
+							if(data.type=='description')
+							{
+								$("#description"+data.point_id).html("<p id='description"+data.point_id+"'>"+data.description+"</p>");
+							}
+							else if(data.type=='explanation')
+							{
+								$("#explanation"+data.point_id).html("<p id='explanation"+data.point_id+"'>"+data.explanation+"</p>");
+							}
+						}, "json")	
+						return false;
+					});
+				}
+
+				if(id_name[0]=='v')
+				{
+					// video_code = id_name.slice(1);
+					var st_index_start = id_name.indexOf("+");
+					var st_index_end = id_name.indexOf("_");
+					var start_time = id_name.substring(st_index_start+1,st_index_end);
+					var last_index = id_name.length
+					var video_code = id_name.substring(st_index_end+1,last_index)
+					$("#video").html("<iframe id='ytplayer' type='text/html' width='640' height='390' src=http://www.youtube.com/embed/"+video_code+"?autoplay=1&start="+start_time+"></iframe>");
+					return false;
+				}
+
+			})
+		})
+
+		// $(document).on("click","button",function(event)
+		// {
+		// 	id_name = $(this).attr("id");
+		// 	if (id_name[0]=='f' || id_name[0]=='f')
+		// 	{
+		// 		form_id = "#"+"edit_"+id_name;
+		// 		$(form_id).submit(function()
+		// 		{
+		// 			$.post($(this).attr('action'),$(this).serialize(),function(data)
+		// 			{
+		// 				if(data.type=='description')
+		// 				{
+		// 					$("#description"+data.point_id).html("<p id='description"+data.point_id+"'>"+data.description+"</p>");
+		// 				}
+		// 				else if(data.type=='explanation')
+		// 				{
+		// 					$("#explanation"+data.point_id).html("<p id='explanation"+data.point_id+"'>"+data.explanation+"</p>");
+		// 				}
+		// 			}, "json")	
+		// 				return false;
+		// 		});
+		// 	}			
+		// })
+	// end here
+	</script>
+</head>
+<body>
+	<a href="/papers/index">Back</a>
+	<%if flash[:message] %>
+		<p><%= flash[:message]%></p>
+	<% end%>
+	<div id='left_section'>
+		<h2 id='paper_name'><%=@paper.name %></h2>
+		<div id='thesis'>
+			<h4 >Thesis:</h4>
+			<p id='paper_thesis'><%=@paper.thesis %></p>
+			<button id='edit'>Edit</button>
+		<div id='edit_thesis'>
+			<form action='/papers/edit' method='post' id="edit_paper">
+				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+				<input type='text' name='paper[name]' placeholder=<%= @paper.name%>>
+				<textarea name='paper[thesis]'><%=@paper.thesis %></textarea>
+				<input type='hidden' name='paper[user_id]' value=<%= @user.id%>>
+				<input type='hidden' name='paper[paper_id]' value=<%= @paper.id%>>
+				<input type='submit' value='Submit' id='paper_submit'>
+			</form>
+		</div>
+	</div>
+	<div id='new_point'>
+		<h3>Add New Point</h3>
+		<form action='/points/create' method='post' id='point_form'>
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+			<input type='text' name='point[description]' placeholder='Enter Description'>
+			<textarea name='point[explanation]' placeholder='Enter Explanation'></textarea>
+			<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
+			<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
+			<input type='submit' value='Submit'>
+		</form>	
+	</div>
+</div>
+
+
+		<div id='video_player'>
+			<h2>Video Player</h2>
+			<div id='video'></div>
+		</div>
+		<h2>Points</h2>
+		<div id='stream'>
+			<%@points.each do |p|%>
+				<div class='paper_point'>
+					<div class='paper_point_upper'>
+						<h3>Description</h3>
+						<a href="/points/delete/<%=p.id%>/<%=p.user_id%>/<%=@paper.id%>">Delete</a>
+					</div>
+					<p id='description<%=p.id %>'><%= p.description%></p>
+					<button id="d_<%=p.id%>">Edit</button>
+					<div id="edit_d_<%=p.id%>" class='edit'>
+						<form action='/points/edit' method='post' id='edit_f_d<%=p.id%>'>
+							<input type='text' name='point[description]' placeholder=<%=p.description %>>
+							<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
+							<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
+							<input type='hidden' name='point[point_id]' value=<%=p.id %>>
+							<input type='hidden' name='point[type]' value=<%= "description"%>>
+							<button id='f_d<%=p.id %>'>Submit</button>
+						</form>
+					</div>
+					<h4>Explanation</h4>
+					<p id="explanation<%=p.id %>"><%=p.explanation %></p>
+					<button id="e_<%=p.id%>">Edit</button>
+					<div id="edit_e_<%=p.id%>" class='edit' >
+						<form action='/points/edit' method='post' id='edit_f_e<%=p.id %>'>
+							<textarea name='point[explanation]' placeholder='Enter Explanation'><%=p.explanation %></textarea>
+							<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
+							<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
+							<input type='hidden' name='point[point_id]' value=<%=p.id %>>
+							<input type='hidden' name='point[type]' value=<%="explanation"%>>
+							<button id='f_e<%=p.id %>'>Submit</button>
+						</form>						
+					</div>
+					<a href="/notesupports/all_groups/<%=p.id%>" class='add_note'>Add Note from Groups</a>
+					<div class='current_notes'>
+					</div>
+					<div class='support_notes'>
+						<% @supports.each do |support|%>
+							
+								<%if support.point_id == p.id%>
+									<div class='support'>
+										<p><%=support.note.notes %></p>
+										<button id="v+<%=support.note.start_time%>_<%=support.note.url %>">Play</button>
+										<a href="">Delete</a>
+									</div>
+								<%end %>
+						<%end %>
+					</div>
+				</div>
+			<% end%>
+			
+		</div>
+
+
+
+</body>
+</html>

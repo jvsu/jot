@@ -22,7 +22,8 @@ class SessionsController < ApplicationController
   		session[:user_id] = @user.id
   		redirect_to "/homes/index"
   	else
-  		flash[:messages] = "Incorrect Inputs"
+  
+  		flash[:message] = @user.errors.full_messages
   		redirect_to "/sessions/index"
   	end
 

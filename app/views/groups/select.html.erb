@@ -1,0 +1,119 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.notes{
+			overflow-x: scroll;
+    		overflow-y: hidden;
+   		 	white-space: nowrap;
+		}
+
+		.jot{
+			height:300px;
+			width:300px;
+			border:1px solid black;
+			display:inline-block;
+			vertical-align: top;
+			margin:5px;
+		}
+		.note_content{
+			display:block;
+			white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+			white-space: pre-wrap;
+			word-break: break-all;
+			width:280px;
+		}
+		#remove_button{
+			width:70px;
+			height:30px;
+			padding:5px;
+		}
+		#submit_1, #submit_2{
+			width:70px;
+			height:30px;
+			padding:5px;
+		}
+			h2{
+			text-transform: capitalize;
+			width:280px;
+			margin-right: auto;
+			margin-left:auto;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+	</style>
+	<script type="text/javascript">
+		//need to figure out how to do ajax
+		// $(document).on("click","#submit_1", function(){
+		// 	$("add_1").submit(function(){
+		// 		$.post($(this).attr('action'),$(this).serialize(),function(data){
+		// 			alert(data.message)
+		// 		},"json");
+		// 		return false;		
+		// 	})
+		// })	
+	</script>
+
+</head>
+<body>
+	<h2>Your Notes</h2>
+	<a href="/groups/view/<%=@group_id %>" id='back'>Back</a>
+	<% if flash[:message]%>
+		<p><%=flash[:message]%></p>
+	<% end%>
+	<div id='all_collections'>
+		<% @collections.each do |collection|%>
+			<div class='notes'>
+				<h4><%= collection.name%></h4>
+				
+					<%@notes.each do |note| %>
+						<%if note.collection_id == collection.id %>
+							<div class='jot'>
+								<p class='note_content'><%=note.notes %></p>
+									<% if @group_notes !=[]%>
+										<%@group_notes.each  do |gn|%> 
+											<% if gn.note_id == note.id%>
+												<form id='remove' action="/groupnotes/delete" method='post'>
+													<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+													<input type='hidden' name='group_note[note_id]' value=<%=note.id %>>
+													<input type='hidden' name='group_note[group_id]' value=<%= @group_id%>>
+													<input type='hidden' name='group_note[user_id]' value=<%=@user.id %>>
+													<input type='hidden' name='group_note[gnote]' value=<%=gn.id %>>
+													<input type='submit' value='Remove' id='remove_button' class='btn btn-danger'>
+												</form>
+											<% end%>
+										<%end %>	
+										
+											<% @all_notes.each do |nn|%>
+												<% if nn == note.id %>
+													<form id='add_1' action="/groupnotes/create" method='post'>
+														<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+														<input type='hidden' name='group_note[note_id]' value=<%=note.id %>>
+														<input type='hidden' name='group_note[group_id]' value=<%= @group_id%>>
+														<input type='hidden' name='group_note[user_id]' value=<%=@user.id %>>
+														<input type='submit' value='Add' id='submit_1' class='btn btn-success'>
+													</form>
+												<%end %>
+											<%end %>
+									<%else%>
+										<form id='add_2' action="/groupnotes/create" method='post'>
+											<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+											<input type='hidden' name='group_note[note_id]' value=<%=note.id %>>
+											<input type='hidden' name='group_note[group_id]' value=<%= @group_id%>>
+											<input type='hidden' name='group_note[user_id]' value=<%=@user.id %>>
+											<input type='submit' value='Add' id='submit_2' class='btn btn-success'>
+										</form>
+									<% end%>	
+							</div>
+						<% end%>
+						
+					<%end%>
+			</div>
+		<% end%>
+
+	</div>
+
+</body>
+</html>

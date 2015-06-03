@@ -4,6 +4,8 @@ class CollectionsController < ApplicationController
 	if collection.save
 		redirect_to "/notes/new/#{collection.id}"
 	else	
+    message = collection.errors.full_messages
+    flash[:message] = message
 		redirect_to "/homes/index"
 	end
 
@@ -13,7 +15,6 @@ class CollectionsController < ApplicationController
   	@user = User.find(session[:user_id])
   	@collections = Collection.all.where(user_id:@user.id)
   	@notes = Note.all.where(user_id:@user.id)
-
   end
 
   def retrieve

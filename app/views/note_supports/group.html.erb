@@ -1,0 +1,77 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		h2{
+			text-transform: capitalize;
+			width:280px;
+			margin-right: auto;
+			margin-left:auto;
+		}
+		.btn.btn-success{
+			width:200px;
+			height:40px;
+			padding:10px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:30px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		h3{
+			margin-left:20px;
+		}
+		.note{
+			width:250px;
+			height:250px;
+			border: 1px solid black;
+			display:inline-block;
+			vertical-align: top;
+			margin:5px;
+		}
+		#add{
+			display:block;
+			float:bottom;
+		}
+		.btn.btn-danger{
+			width:70px;
+			height:30px;
+			padding:5px;
+		}
+
+
+	</style>
+</head>
+<body>
+	<h2><%=@group.name %></h2>
+	<a href="/notesupports/all_groups/<%=@point_id %>" id='back'>Back</a>
+	
+	<%if flash[:message] %>
+		<p><%=flash[:message] %></p> 
+	<% end%>
+
+	<h3>Current Notes</h3>
+	<div id='current_notes'>
+		<% @group_notes.each do |gn|%>
+			<div class='note'>
+				<p><a href="/notes/retrieve/<%= gn.note.id%>"><%= gn.note.notes%></a></p> 
+				<!-- note, point, user.id -->
+				<form id='add' action="/note_supports/create" method='post'>
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<input type='hidden' name='support[note_id]' value=<%= gn.note_id%>>
+					<input type='hidden' name='support[user_id]' value=<%=@user.id %>>
+					<input type='hidden' name='support[point_id]' value=<%=@point_id%>>
+					<input type='hidden' name='support[group_id]' value=<%= gn.group_id%>>
+					<input type='submit' value='Add' id='add_button' class='btn btn-danger'>
+				</form>
+
+			</div>
+		<% end%>
+		
+
+	</div>
+</body>
+</html>

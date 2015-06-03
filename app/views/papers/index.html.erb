@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		textarea{
+			display:block;
+		}
+		input{
+			display:block;
+		}
+		.paper{
+			width:250px;
+			height:250px;
+			border:1px solid black;
+			margin:5px;
+			display:inline-block;
+		}
+
+	</style>
+</head>
+<body>
+	<h1>Papers</h1>
+	<a href="/homes/index">Back</a>
+	<div id='new_paper'>
+		<h3>Create New Paper</h3>
+		<form action='/papers/create' method='post' id='new_paper_form'>
+			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+			<input type='text' name='paper[name]' placeholder='Enter Name'>
+			<textarea name='paper[thesis]' placeholder='Enter Thesis'></textarea>
+			<input type='hidden' name='paper[user_id]' value=<%= @user.id%>>
+			<input type='submit' value='Submit' id='sub' class='btn btn-primary'>
+		</form>
+	</div>
+
+	<h3>Papers</h3>
+	<div id='all_paper'>
+		<%@papers.each do |paper| %>
+		<div class='paper'>
+			<p><a href="/papers/new/<%=paper.id %>"><%= paper.name %></a></p>
+			<a href="/papers/delete/<%= paper.id%>">Delete</a>
+		</div>
+			
+		<% end%>
+	</div>
+</body>
+</html>

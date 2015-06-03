@@ -38,11 +38,10 @@
 <body>
 	<h1>JOT</h1>
 	<% if flash['message']%>
-		<p><%=flash['message'] %></p>
+		<p><%=flash['message']%></p>
 	<%end %>
 	<div id='sign_up'>
 		<h3>Sign Up</h3>
-		
 		<form action='/sessions/sign_up' method='post'>
 			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
 			<input type='input' name='user[user_name]' placeholder='Enter User Name'>

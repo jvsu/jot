@@ -1,0 +1,75 @@
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		h2{
+			text-transform: capitalize;
+			width:280px;
+			margin-right: auto;
+			margin-left:auto;
+		}
+		.btn.btn-success{
+			width:200px;
+			height:40px;
+			padding:10px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			margin-top:30px;
+		}
+		#back{
+			float:right;
+			margin-right:100px;
+		}
+		h3{
+			margin-left:20px;
+		}
+		.note{
+			width:250px;
+			height:250px;
+			border: 1px solid black;
+			display:inline-block;
+			vertical-align: top;
+			margin:5px;
+		}
+		#remove{
+			display:block;
+			float:bottom;
+		}
+		.btn.btn-danger{
+			width:70px;
+			height:30px;
+			padding:5px;
+		}
+
+
+	</style>
+</head>
+<body>
+	<h2><%=@group.name %></h2>
+	<a href="/groups/all" id='back'>Back</a>
+	<div id="add_notes">
+		<a href="/groups/select/<%=@group.id%>" class='btn btn-success'>Add Note</a>
+
+	</div>
+	<h3>Current Notes</h3>
+	<div id='current_notes'>
+		<% @group_notes.each do |gn|%>
+			<div class='note'>
+				<p><a href="/notes/retrieve/<%= gn.note.id%>"><%= gn.note.notes%></a></p> 
+				<form id='remove' action="/groupnotes/delete" method='post'>
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<input type='hidden' name='group_note[group_id]' value=<%= @group.id%>>
+					<input type='hidden' name='group_note[user_id]' value=<%=@user.id %>>
+					<input type='hidden' name='group_note[gnote]' value=<%=gn.id %>>
+					<input type='hidden' name='group_note[view]' value='true'>
+					<input type='submit' value='Remove' id='remove_button' class='btn btn-danger'>
+				</form>
+
+			</div>
+		<% end%>
+		
+
+	</div>
+</body>
+</html>

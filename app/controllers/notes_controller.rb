@@ -1,6 +1,4 @@
 require 'json'  
-require 'net/http'  #to make a GET request
-require 'open-uri' #to fetch the data from the URL to then be parsed by JSON
 
 class NotesController < ApplicationController
   def new
