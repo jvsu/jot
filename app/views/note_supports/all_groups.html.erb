@@ -6,9 +6,10 @@
 		.group{
 			width:250px;
 			height:250px;
-			border:1px solid black;
+			border:1px solid #D8D8D8;
 			display:inline-block;
 			margin:6px;
+			vertical-align:top;
 		}
 
 		#all_groups{
@@ -42,6 +43,9 @@
 		#group_name{
 			text-transform: capitalize;
 		}
+		h4{
+			margin-left:10px;
+		}
 
 	</style>
 	<script type="text/javascript">
@@ -50,7 +54,6 @@
 				$.post($(this).attr('action'),$(this).serialize(),function(data){
 
 					$("#all_groups").prepend("<div class='group'><p><a href='/groups/view/"+data.group_id+"'>"+data.name+"</a></p></div>")
-
 				},"json")
 				return false;
 			})
@@ -59,17 +62,13 @@
 	</script>
 </head>
 <body>
-	
 		<h2>All Groups</h2>
 		<a href="/papers/new/<%=@point.paper.id %>" id='back'>Back</a>
-		
-
-
 	<div id='all_groups'>
 		<% if @groups%>
 			<% @groups.each do |group|%>
 				<div class='group'>
-					<p><a href='/notesupports/group/<%=group.id%>/<%=@point_id %>' id='group_name'><%=group.name %></a></p>
+					<h4><a href='/notesupports/group/<%=group.id%>/<%=@point_id %>' id='group_name'><%=group.name %></a></h4>
 				</div>
 			<% end%>
 		<% end%>

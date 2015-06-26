@@ -33,6 +33,7 @@ group :development, :test do
      gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
   	gem 'selenium-webdriver', '~> 2.45.0'
 end
+gem "factory_girl_rails", "~> 4.0"
 
 gem 'hirb'
 gem 'bootstrap-sass', '~> 3.3.4'

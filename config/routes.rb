@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   get '/points/delete/:point_id/:user_id/:paper_id' =>"points#delete"
 
-  get 'papers/index'
+  get 'papers/index'    
 
   get '/papers/new/:paper_id'=>'papers#new'
   get '/papers/delete/:paper_id' =>"papers#delete"
@@ -54,12 +54,13 @@ Rails.application.routes.draw do
     get '/notes/retrieve/:notes_id' => 'notes#retrieve';
     match '/papers/create/' => 'papers#create', :via=>[:get,:post];
     match '/papers/edit/' => 'papers#edit', :via=>[:get,:post];
-    match '/points/create/' => 'points#create', :via=>[:get,:post];
+    match '/points/create/' => 'points#create', :via=>[:get,:post]; 
     match '/points/edit/' => 'points#edit', :via=>[:get,:post];
     get '/notesupports/all_groups/:point_id' => 'note_supports#all_groups';
     get '/notesupports/group/:group_id/:point_id' => 'note_supports#group';
     match '/note_supports/create' => 'note_supports#create', :via=>[:get,:post];
-
+    match '/groups/delete/:group_id/:user_id' => 'groups#delete', :via=>[:get,:post];
+    
     
      
   # The priority is based upon order of creation: first created -> highest priority.

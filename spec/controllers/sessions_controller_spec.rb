@@ -4,8 +4,6 @@ RSpec.describe SessionsController, type: :controller do
 
   describe "GET #index" do
 
-
-
     it "returns http success" do
       get :index
       expect(response).to have_http_status(:success)
@@ -79,7 +77,7 @@ RSpec.describe SessionsController, type: :controller do
         post(:sign_in, :user=>{email:"joe@yahoo.com",password:"rosebud"})
          expect(session['user_id']).to be_nil    
     end
-
+   
     it "Sets Flash Message if incorrect credentials" do
       post(:sign_in, :user=>{email:"john@yahoo.com",password:"aaaaaaaa"})
       expect(flash['message']).to eq('Email or Password Not Correct')

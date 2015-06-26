@@ -20,11 +20,9 @@
 		#video{
 			width:640px;
 			height:390px;
-			border:1px solid black;
+			border:1px solid #E8E8E8;
 		}
-		.paper_point{
-			border:1px solid black;
-		}
+	
 		.paper_point_upper a {
 			display:inline-block;
 			width:200px;
@@ -32,24 +30,39 @@
 		.paper_point_upper h3{
 			display:inline-block;
 			width:250px;
+			margin-bottom:10px;
 		}
+
 		.add_note{
 			display:block;
 		}
 		.support{
-			border:1px solid black;
-			width:250px;
-			height:250px;
-			margin:8px;
+			height:300px;
+			width:310px;
+			border:1px solid #F8F8F8;
+			display:inline-block;
+			vertical-align: top;
+			margin:5px;
+			overflow-y:scroll;
+			overflow-x:hidden;
+			white-space:normal;
 		}
+	 .support button, .support a{
+			display:inline-block;
+			width:50px;
+		}
+		.support p{
+			padding:10px;
+		}
+
 		#video_player{
 			display:inline-block;
 			vertical-align: top;
 			margin-left:150px;
-
 		}
 		.paper_point{
 			display:block;
+			margin:10px;
 		}
 		.support_notes{
 			 overflow-x: scroll;
@@ -57,13 +70,89 @@
    			 white-space: nowrap;
    			 height:350px;
 		}
-		.support{
+	
+		#back{
+			display:block;
+			float:right;
+			margin-right:100px;
+		}
+	
+		#edit_thesis textarea{
+			width:310px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			height:100px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+		}
+		#edit_thesis_name{
+			width:310px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			height:40px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+		}
+		#paper_submit, #new_point{
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#description_name{
+			width:310px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			height:40px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+		}
+		#new_point textarea{
+			width:310px;
+			display:block;
+			margin-left:auto;
+			margin-right:auto;
+			height:200px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+		}
+		#stream{
+			height:700px;
+			overflow-y:scroll;
+			overflow-x:hidden;
+		}
+		#stream h4{
 			display:inline-block;
-			white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
-			white-space: pre-wrap;
-			word-break: break-all;
-			width:360px;
-			vertical-align: top;
+			margin-bottom:20px;
+		}
+		.paper_explanation, .paper_description{
+			margin-left:15px;
+		}
+		.edit_description{
+			width:310px;
+			height:40px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+			margin-left:10px;
+			margin-left: auto;
+			margin-right:auto;
+			display:block;
+		}
+		.edit_explanation{
+			width:650px;
+			height:200px;
+			margin-bottom:10px;
+			border:1px solid #E8E8E8;
+			margin-left: auto;
+			margin-right:auto;
+			display:block;
+		}
+		.edit button{
+			display:block;
+			margin-left: auto;
+			margin-right:auto;
 		}
 	</style>
 	<script type="text/javascript">
@@ -136,7 +225,7 @@
 
 			})
 		})
-
+		
 		// $(document).on("click","button",function(event)
 		// {
 		// 	id_name = $(this).attr("id");
@@ -164,7 +253,9 @@
 	</script>
 </head>
 <body>
-	<a href="/papers/index">Back</a>
+	
+	<h1>JOT</h1>
+	<a href="/papers/index" id='back'>Back</a>
 	<%if flash[:message] %>
 		<p><%= flash[:message]%></p>
 	<% end%>
@@ -173,15 +264,15 @@
 		<div id='thesis'>
 			<h4 >Thesis:</h4>
 			<p id='paper_thesis'><%=@paper.thesis %></p>
-			<button id='edit'>Edit</button>
+			<button id='edit' class='btn btn-link'>Edit</button>
 		<div id='edit_thesis'>
 			<form action='/papers/edit' method='post' id="edit_paper">
 				<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-				<input type='text' name='paper[name]' placeholder=<%= @paper.name%>>
+				<input type='text' name='paper[name]' placeholder=<%= @paper.name%> id='edit_thesis_name'>
 				<textarea name='paper[thesis]'><%=@paper.thesis %></textarea>
 				<input type='hidden' name='paper[user_id]' value=<%= @user.id%>>
 				<input type='hidden' name='paper[paper_id]' value=<%= @paper.id%>>
-				<input type='submit' value='Submit' id='paper_submit'>
+				<input type='submit' value='Submit' id='paper_submit' class='btn btn-success'>
 			</form>
 		</div>
 	</div>
@@ -189,11 +280,11 @@
 		<h3>Add New Point</h3>
 		<form action='/points/create' method='post' id='point_form'>
 			<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
-			<input type='text' name='point[description]' placeholder='Enter Description'>
+			<input type='text' name='point[description]' placeholder='Enter Description' id='description_name'>
 			<textarea name='point[explanation]' placeholder='Enter Explanation'></textarea>
 			<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
 			<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
-			<input type='submit' value='Submit'>
+			<input type='submit' value='Submit' class='btn btn-success' id='new_point'>
 		</form>	
 	</div>
 </div>
@@ -209,31 +300,33 @@
 				<div class='paper_point'>
 					<div class='paper_point_upper'>
 						<h3>Description</h3>
+						<button id="d_<%=p.id%>" class='btn btn-link'>Edit</button>
 						<a href="/points/delete/<%=p.id%>/<%=p.user_id%>/<%=@paper.id%>">Delete</a>
+
 					</div>
-					<p id='description<%=p.id %>'><%= p.description%></p>
-					<button id="d_<%=p.id%>">Edit</button>
+					<p id='description<%=p.id %>' class='paper_description'><%= p.description%></p>
+					
 					<div id="edit_d_<%=p.id%>" class='edit'>
 						<form action='/points/edit' method='post' id='edit_f_d<%=p.id%>'>
-							<input type='text' name='point[description]' placeholder=<%=p.description %>>
+							<input type='text' name='point[description]'  class='edit_description' placeholder=<%=p.description %>>
 							<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
 							<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
 							<input type='hidden' name='point[point_id]' value=<%=p.id %>>
 							<input type='hidden' name='point[type]' value=<%= "description"%>>
-							<button id='f_d<%=p.id %>'>Submit</button>
+							<button id='f_d<%=p.id %>' class='btn btn-info'>Submit</button>
 						</form>
 					</div>
 					<h4>Explanation</h4>
-					<p id="explanation<%=p.id %>"><%=p.explanation %></p>
-					<button id="e_<%=p.id%>">Edit</button>
+					<button id="e_<%=p.id%>" class="btn btn-link">Edit</button>
+					<p id="explanation<%=p.id %>" class='paper_explanation'><%=p.explanation %></p>
 					<div id="edit_e_<%=p.id%>" class='edit' >
 						<form action='/points/edit' method='post' id='edit_f_e<%=p.id %>'>
-							<textarea name='point[explanation]' placeholder='Enter Explanation'><%=p.explanation %></textarea>
+							<textarea name='point[explanation]' class='edit_explanation' placeholder='Enter Explanation'><%=p.explanation %></textarea>
 							<input type='hidden' name='point[user_id]' value=<%= @user.id%>>
 							<input type='hidden' name='point[paper_id]' value=<%=@paper.id %>>
 							<input type='hidden' name='point[point_id]' value=<%=p.id %>>
 							<input type='hidden' name='point[type]' value=<%="explanation"%>>
-							<button id='f_e<%=p.id %>'>Submit</button>
+							<button id='f_e<%=p.id %>' class='btn btn-info'>Submit</button>
 						</form>						
 					</div>
 					<a href="/notesupports/all_groups/<%=p.id%>" class='add_note'>Add Note from Groups</a>
@@ -244,9 +337,9 @@
 							
 								<%if support.point_id == p.id%>
 									<div class='support'>
+										<button id="v+<%=support.note.start_time%>_<%=support.note.url %>" class='btn btn-link'>Play</button>
+										<a href="" class='support_delete'>Delete</a>
 										<p><%=support.note.notes %></p>
-										<button id="v+<%=support.note.start_time%>_<%=support.note.url %>">Play</button>
-										<a href="">Delete</a>
 									</div>
 								<%end %>
 						<%end %>
@@ -255,8 +348,5 @@
 			<% end%>
 			
 		</div>
-
-
-
 </body>
 </html>

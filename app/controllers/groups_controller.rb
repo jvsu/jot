@@ -1,21 +1,17 @@
 require 'json' 
 
 class GroupsController < ApplicationController
-  def new
-  end
 
   def create
     group = Group.new(groups_params)
+
     if group.save
-      json_data = {name:groups_params[:name], group_id:group.id}
+      json_data = {name:groups_params[:name], group_id:group.id,success:'true',user_id:group.user_id}
       render json:json_data
     else
-     json_data = {name:"Did not save"}
+     json_data = {name:"Name required", success:'false'}
       render json:json_data
     end
-  end
-
-  def edit
   end
 
   def view
@@ -53,9 +49,26 @@ class GroupsController < ApplicationController
     group.each do |id|
       @all_notes.delete(id)
     end
+  end
+  
+  def delete
+    group = Group.find(params[:group_id])
+    group_owner = group.user_id.to_i
+    requesting_user = params[:user_id]
+    requesting_user = requesting_user.to_i  
 
+    if group_owner == requesting_user
+      group_delete = Group.find(params[:group_id]).delete
+      flash[:message] ="Group Deleted"
+      redirect_to '/groups/all'
     
-   
+    else
+      flash[:message] ="Group Not Deleted"
+       redirect_to '/groups/all'
+    
+    end
+
+
   end
 
   private

@@ -6,9 +6,15 @@
 		.group{
 			width:250px;
 			height:250px;
-			border:1px solid black;
+			border:1px solid #D8D8D8;
 			display:inline-block;
 			margin:6px;
+			vertical-align:top;
+		}
+		.delete{
+			width:20px;
+			height:20px;
+			margin-left: 200px;
 		}
 
 		#all_groups{
@@ -30,6 +36,7 @@
 			display:block;
 			margin-left:auto;
 			margin-right:auto;
+			height:40px;
 		}
 		#sub{
 			display:block;
@@ -41,14 +48,30 @@
 		#group_name{
 			text-transform: capitalize;
 		}
+		.group_name{
+			text-transform: capitalize;
+			margin-left:10px;
+			padding:7px;
+
+		}
+		#flash_message{
+			margin-left:15px;
+		}
+
 
 	</style>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#new_group_form").submit(function(){
 				$.post($(this).attr('action'),$(this).serialize(),function(data){
-
-					$("#all_groups").prepend("<div class='group'><p><a href='/groups/view/"+data.group_id+"'>"+data.name+"</a></p></div>")
+					if (data.success =='true') 
+					{
+						$("#all_groups").prepend("<div class='group'><p class='group_name'><a href='/groups/view/"+data.group_id+"'>"+data.name+"</a></p><a class='delete' href='/groups/delete/"+data.group_id+"/"+data.user_id+"'>Delete</a></div>")
+					}
+					else
+					{
+						alert(data.name)
+					};
 
 				},"json")
 				return false;
@@ -58,6 +81,7 @@
 	</script>
 </head>
 <body>
+	<h1>Jot</h1>
 	<div id='new_group'>
 		<h2>Create New Group</h2>
 		<a href="/homes/index" id='back'>Back</a>
@@ -67,14 +91,17 @@
 			<input type='hidden' name='group[user_id]' value=<%=@user.id %>>
 			<input type='submit' value='Submit' id='sub' class='btn btn-primary'>
 		</form>
-
 	</div>
-
+	<%if flash[:message] %>
+			<p id='flash_message'><%=flash[:message] %></p>
+		<% end%>
 	<div id='all_groups'>
+	
 		<% if @groups%>
 			<% @groups.each do |group|%>
 				<div class='group'>
-					<p><a href='/groups/view/<%=group.id%>' id='group_name'><%=group.name %></a></p>
+					<h4 class='group_name'><a href='/groups/view/<%=group.id%>'><%=group.name %></a></h4>
+					<a  class='delete' href="/groups/delete/<%=group.id %>/<%= @user.id%>">Delete</a>
 				</div>
 			<% end%>
 		<% end%>

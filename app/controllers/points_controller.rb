@@ -1,11 +1,6 @@
 require 'json' 
 
 class PointsController < ApplicationController
-  def all
-  end
-
-  def new
-  end
 
   def create
     point = Point.new(points_params)
@@ -24,11 +19,6 @@ class PointsController < ApplicationController
     end
   end
 
-
-  def view
-
-  end
-
   def edit
     if points_edit_params[:type] == "description"
   
@@ -43,7 +33,6 @@ class PointsController < ApplicationController
     else
        render json:"Did not work" 
     end
-
   end
 
   def delete
@@ -52,7 +41,7 @@ class PointsController < ApplicationController
     point_owner = point_owner.to_i
     if session[:user_id]== point_owner
       point_delete = Point.find(params[:point_id]).delete
-      flash[:messsage]='Point Deleted'
+      flash[:message]='Point Deleted'
       redirect_to "/papers/new/#{params[:paper_id]}"
 
    else

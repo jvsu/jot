@@ -2,13 +2,19 @@
 <head>
 	<title></title>
 	<style type="text/css">
-		
-		#vid_notes_tool{
-			display:inline-block;
-			margin-left: 100px;
-			border:1px solid black;
+		h1{
+			width:50px;
+			margin-left: auto;
+			margin-right:auto;
 		}
-		#video{
+
+		#vid_notes_tool{
+			display:block;
+			margin-left: auto;
+			margin-right:auto;
+			width:1400px;
+		}
+		#video_container{
 			display:inline-block;
 		}
 		#nav h2{
@@ -23,7 +29,7 @@
 		#notes_flow{
 			display:block;
 			height:350px;
-			border:1px solid black;
+			border:1px solid #F8F8F8;
 			vertical-align: top;
 			margin-bottom:10px;
 			margin-top:10px;
@@ -46,19 +52,21 @@
 		#new_notes{
 			display:inline-block;
 			vertical-align: top;
-			border:1px solid black;
+			border:1px solid #E8E8E8;
 			margin-left:70px;
-			margin-top:70px;
+			margin-top:60px;
 		}
 		#new_notes textarea{
 			width:500px;
 			height:300px;
+			border:1px solid #E8E8E8;
 		}
 		#submit_note{
 			display:block;
 			width:100px;
 			margin-left: auto;
 			margin-right:auto;
+			margin-bottom:5px;
 		}
 		#new_notes h4{
 			display:block;
@@ -67,24 +75,21 @@
 			margin-left:auto;
 		}
 		.note{
-			display:inline-block;
-			height:310px;
+			height:300px;
 			width:310px;
-			border:1px solid black;
-			margin:5px;
+			border:1px solid #F8F8F8;
+			display:inline-block;
 			vertical-align: top;
-			overflow: scroll;
+			margin:5px;
+			overflow-y:scroll;
+			overflow-x:hidden;
+			white-space:normal;
+		}
+		.note p{
+			margin:5px;
 		}
 		.note_time{
 			display:block;
-		}
-		.note_content{
-			display:block;
-			white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
-			white-space: pre-wrap;
-			word-break: break-all;
-			width:300px;
-
 		}
 	</style>
 	<script type="text/javascript">
@@ -93,46 +98,76 @@
 				$.post($(this).attr('action'),$(this).serialize(),function(data){
 					if(data.success=='true')
 					{
-						$("#notes_flow").prepend("<div class='note'><a href='/notes/retrieve/"+data.note_id+"'>Note View</a><p class='note_time'>"+data.start_timeh+":"+data.start_time1+":"+data.start_time2+"</p><p class='note_content'>"+data.notes+"</p></div>");
+						$("#notes_flow").prepend("<div class='note'><a href='/notes/retrieve/"+data.note_id+"'>Note View</a><p class='note_time'>"+data.start_timeh+" H "+data.start_time1+" M "+data.start_time2+" S </p><a class='note_content' href='' id='v+"+data.time+"_"+data.url+"'>"+data.notes+"</a></div>");
 					}
 					else
 					{
-						alert("The Note Did Not Get Processed");
+						alert(data.messages);
 					}
 				}, "json");
 				return false;
 			})
+			$("a").click(function(event){
+				id_name = $(this).attr("id");
+				if(id_name[0]=='v')
+				{
+					// video_code = id_name.slice(1);
+					var st_index_start = id_name.indexOf("+");
+					var st_index_end = id_name.indexOf("_");
+					var start_time = id_name.substring(st_index_start+1,st_index_end);
+					var last_index = id_name.length
+					var video_code = id_name.substring(st_index_end+1,last_index)
+					$("#video").html("<iframe id='ytplayer' type='text/html' width='640' height='390' src=http://www.youtube.com/embed/"+video_code+"?autoplay=1&start="+start_time+"></iframe>");
+					return false;
+				}
+			})
 		})
-
+		
+		$(document).on('click',"a",function(event){
+			id_name = $(this).attr("id");
+				if(id_name[0]=='v')
+				{
+					// video_code = id_name.slice(1);
+					var st_index_start = id_name.indexOf("+");
+					var st_index_end = id_name.indexOf("_");
+					var start_time = id_name.substring(st_index_start+1,st_index_end);
+					var last_index = id_name.length
+					var video_code = id_name.substring(st_index_end+1,last_index)
+					$("#video").html("<iframe id='ytplayer' type='text/html' width='640' height='390' src=http://www.youtube.com/embed/"+video_code+"?autoplay=1&start="+start_time+"></iframe>");
+					return false;
+				}
+		});
 	</script>
 </head>
 <body>
 	<div id='nav'>
-		<h2>Jot</h2>
-		<a href="/homes/index">Back</a>
+		<h1>Jot</h1>
+		<a href="/homes/index">Home</a>
+		<a href="/collections/all">Collections</a>
 	</div>
 	
-
 <div id='top_container'>
 	<div id='vid_notes_tool'>
-		<div id='video'>
+		<div id='video_container'>
 			<h2><%=@collection.name %></h2>
-			<iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/<%=@collection.url%>?autoplay=1"></iframe>
+			<div id='video'>
+				<iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/<%=@collection.url%>?autoplay=1"></iframe>
+			</div>
 		</div>
 		
 		<div id='new_notes'>
 			<h4>New Note</h4>
 			<form action='/notes/create' method='post' id='note'>
 				<div id='ts'>
-					<input type='text' name='note[start_timeh]' placeholder='Enter Hour' id='time_stamph'>
-					: <input type='text' name='note[start_time1]' placeholder='Enter Minutes' id='time_stamp1'> 
-					: <input type='text' name='note[start_time2]' placeholder='Enter Seconds' id='time_stamp2'>
+					<input type='number' name='note[start_timeh]' placeholder='Enter Hour' id='time_stamph'>
+					: <input type='number' name='note[start_time1]' placeholder='Enter Minutes' id='time_stamp1'> 
+					: <input type='number' name='note[start_time2]' placeholder='Enter Seconds' id='time_stamp2'>
 				</div>
 				<input type='hidden' name='note[user_id]' value=<%=@user.id %>>
 				<textarea name='note[notes]' placeholder='Enter New Note'></textarea>
 				<input type='hidden' name='note[url]' value=<%=@collection.url%>>
 				<input type='hidden' name='note[collection_id]' value=<%=@collection.id%>>
-				<input type='submit' value='Submit' id='submit_note'>
+				<input type='submit' value='Submit' id='submit_note' class='btn btn-success'>
 			</form>
 		</div>
 	</div>
@@ -143,7 +178,7 @@
 			<div class='note'>
 				<a href="/notes/retrieve/<%=note.id%>">Note View</a>
 				<p class='note_time'><%=note.time_stamp_h %> H <%=note.time_stamp_m %> M <%=note.time_stamp_s%> S </p>
-				<p class='note_content'><%=note.notes %></p>
+				<a class='note_content' href='' id="v+<%=note.start_time%>_<%=note.url %>"><%=note.notes %></a>
 			</div>
 		<% end%>	
 	</div>

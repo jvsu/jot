@@ -25,7 +25,7 @@ class CollectionsController < ApplicationController
 
   def destroy
   	 collection_id = params[:collection_id]
-    @delete_collection = Collection.find(params[:collection_id]).delete
+    delete_collection = Collection.find(params[:collection_id]).delete
     flash[:message] = 'Collection Deleted'
     redirect_to "/collections/all"
   end

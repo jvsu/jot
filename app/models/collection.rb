@@ -1,6 +1,7 @@
 class Collection < ActiveRecord::Base
   belongs_to :user
   validates :name, :user_id, :url, presence:true
+  validates :user_id, numericality: true
 
   def a_method_used_for_validation_purposes
   	errors.add(:name, "Cannot be Blank")

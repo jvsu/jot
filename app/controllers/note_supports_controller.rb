@@ -1,9 +1,5 @@
 class NoteSupportsController < ApplicationController
-  def all
-  end
 
-  def new
-  end
 
   def create
     support= PointSupport.new(:user_id=>support_params[:user_id],:note_id=>support_params[:note_id], :point_id=>support_params[:point_id])
@@ -16,11 +12,7 @@ class NoteSupportsController < ApplicationController
     end
   end
 
-  def view
-  end
 
-  def delete
-  end
 
   def all_groups
      @user = User.find(session[:user_id])
