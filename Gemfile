@@ -38,6 +38,7 @@ gem "factory_girl_rails", "~> 4.0"
 gem 'hirb'
 gem 'bootstrap-sass', '~> 3.3.4'
 gem 'bcrypt', '~> 3.1.7'
+gem 'rails_12factor', group: :production
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
