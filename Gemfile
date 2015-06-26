@@ -40,6 +40,11 @@ gem 'bootstrap-sass', '~> 3.3.4'
 gem 'bcrypt', '~> 3.1.7'
 gem 'rails_12factor', group: :production
 
+source 'https://rubygems.org'
+gem 'nokogiri'
+gem 'rack', '~>1.1'
+gem 'rspec', :require => 'spec'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

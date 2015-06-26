@@ -109,6 +109,10 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    rspec (3.2.0)
+      rspec-core (~> 3.2.0)
+      rspec-expectations (~> 3.2.0)
+      rspec-mocks (~> 3.2.0)
     rspec-core (3.2.3)
       rspec-support (~> 3.2.0)
     rspec-expectations (3.2.1)
@@ -179,8 +183,11 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   json (~> 1.8.1)
+  nokogiri
+  rack (~> 1.1)
   rails (= 4.1.6)
   rails_12factor
+  rspec
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
